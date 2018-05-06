@@ -129,6 +129,13 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 
 		if [ ! -e wp-config.php ]; then
 			awk '/^\/\*.*stop editing.*\*\/$/ && c == 0 { c = 1; system("cat") } { print }' wp-config-sample.php > wp-config.php <<'EOPHP'
+//Redis hostname
+define("WP_REDIS_HOST", "redis");
+
+//This CA Cert is required for WordPress to connect to MySQL using SSL
+define('MYSQL_SSL_CA', "/home/site/wwwroot/BaltimoreCyberTrustRoot.crt.pem");
+define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL | MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
+
 // If we're behind a proxy server and using HTTPS, we need to alert Wordpress of that fact
 // see also http://codex.wordpress.org/Administration_Over_SSL#Using_a_Reverse_Proxy
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
@@ -233,7 +240,28 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 
 $mysql->close();
 EOPHP
-	fi
+
+# Install BaltimoreCyberTrustRoot.crt.pem
+if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
+  if ( wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem ); then
+    echo "Downloading BaltimoreCyberTrustRoot.crt.pem"
+  else
+    echo "## WARN: wget failed for https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
+  fi
+fi
+
+# Install Redis Cache plugin
+if [ ! -e wp-content/plugins/redis-cache ]; then
+  if ( wget https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip ); then
+    unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
+    rm redis-cache.1.3.8.zip
+  else
+    echo "## WARN: wget failed for https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+  fi
+fi
+
+
+fi
 
 	# now that we're definitely done writing configuration, let's clear out the relevant envrionment variables (so that stray "phpinfo()" calls don't leak secrets from our code)
 	for e in "${envs[@]}"; do
