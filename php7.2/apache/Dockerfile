@@ -28,6 +28,16 @@ RUN set -ex; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*
 
+ENV PHPREDIS_VERSION=4.0.2
+
+RUN docker-php-source extract \
+  && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
+  && tar xfz /tmp/redis.tar.gz \
+  && rm -r /tmp/redis.tar.gz \
+  && mv phpredis-$PHPREDIS_VERSION /usr/src/php/ext/redis \
+  && docker-php-ext-install redis \
+  && docker-php-source delete
+
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
