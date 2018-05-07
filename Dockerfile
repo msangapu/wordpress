@@ -67,7 +67,7 @@ RUN set -ex; \
 RUN set -ex; \
     curl -L -o /var/www/html/BaltimoreCyberTrustRoot.crt.pem "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"; \
     curl -o redis-cache.zip -fSL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"; \
-    unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/; \
+    tar -xzf redis-cache.1.3.8.zip -C /var/www/html/wp-content/plugins/; \
     rm redis-cache.zip; \
     chown -R www-data:www-data /usr/src/wordpress
 
