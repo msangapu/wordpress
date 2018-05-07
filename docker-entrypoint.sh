@@ -54,12 +54,13 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			. | tar --extract --file -
 		echo >&2 "Complete! WordPress has been successfully copied to $PWD"
 
-
+		echo "Downloading BaltimoreCyberTrustroot.crt.pem"
     	curl -o /var/www/html/BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
-    	curl -o redis-cache.zip -fSL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
-    	tar -xzf redis-cache.zip -C /var/www/html/wp-content/plugins/
-    	rm redis-cache.zip; 
-    
+
+		echo "Downloading Redis cache"
+		curl -o redis-cache.zip -fSL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+		tar -xzf redis-cache.zip -C /var/www/html/wp-content/plugins/
+		rm redis-cache.zip; 
 
 		if [ ! -e .htaccess ]; then
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
