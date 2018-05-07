@@ -28,6 +28,7 @@ RUN set -ex; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*
 
+#install redis php extension
 ENV PHPREDIS_VERSION=4.0.2
 
 RUN docker-php-source extract \

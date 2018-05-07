@@ -53,6 +53,28 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			--owner "$user" --group "$group" \
 			. | tar --extract --file -
 		echo >&2 "Complete! WordPress has been successfully copied to $PWD"
+
+		# Install BaltimoreCyberTrustRoot.crt.pem
+		if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
+		if ( wget --directory-prefix=/var/www/html https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem ); then
+			echo "Downloading BaltimoreCyberTrustRoot.crt.pem"
+		else
+			echo "## WARN: wget failed for https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
+		fi
+		fi
+
+		# Install Redis Cache plugin
+		if [ ! -e wp-content/plugins/redis-cache ]; then
+		if ( wget https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip ); then
+		    echo "Downloading Redis Cache plugin"
+			unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
+			rm redis-cache.1.3.8.zip
+		else
+			echo "## WARN: wget failed for https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+		fi
+		fi
+
+
 		if [ ! -e .htaccess ]; then
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
 			cat > .htaccess <<-'EOF'
@@ -244,25 +266,6 @@ EOPHP
 	for e in "${envs[@]}"; do
 		unset "$e"
 	done
-fi
-
-# Install BaltimoreCyberTrustRoot.crt.pem
-if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
-  if ( wget --directory-prefix=/var/www/html https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem ); then
-    echo "downloading cert..."
-  else
-    echo "## WARN: wget failed for https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
-  fi
-fi
-
-# Install Redis Cache plugin
-if [ ! -e wp-content/plugins/redis-cache ]; then
-  if ( wget https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip ); then
-    unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
-    rm redis-cache.1.3.8.zip
-  else
-    echo "## WARN: wget failed for https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
-  fi
 fi
 
 chown -R "$user:$group" /var/www/html
