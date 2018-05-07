@@ -248,7 +248,7 @@ fi
 
 # Install BaltimoreCyberTrustRoot.crt.pem
 if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
-  if ( wget https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem ); then
+  if ( wget --directory-prefix=/var/www/html https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem ); then
     echo "downloading cert..."
   else
     echo "## WARN: wget failed for https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
