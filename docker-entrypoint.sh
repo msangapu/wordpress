@@ -60,8 +60,13 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         apt-get update
         apt-get install unzip
 
+		echo "Downloading https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
         curl -o /var/www/html/wp-content/plugins/redis-cache.zip -fSL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+
+		echo "Unzipping redis-cache.zip"
         unzip /var/www/html/wp-content/plugins/redis-cache.zip
+
+		echo "Removing redis-cache.zip"
         rm /var/www/html/wp-content/plugins/redis-cache.zip
         
         chown -R "$user:$group" /var/www/html
