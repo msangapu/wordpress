@@ -160,7 +160,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			awk '/^\/\*.*stop editing.*\*\/$/ && c == 0 { c = 1; system("cat") } { print }' wp-config-sample.php > wp-config.php <<'EOPHP'
 
 define('WP_REDIS_HOST', 'redis');
-define('MYSQL_SSL_CA', '/home/site/wwwroot/BaltimoreCyberTrustRoot.crt.pem');
+define('MYSQL_SSL_CA', getenv('MYSQL_SSL_CA'));
 define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL | MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
 
 // If we're behind a proxy server and using HTTPS, we need to alert Wordpress of that fact
