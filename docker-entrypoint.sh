@@ -54,21 +54,32 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			. | tar --extract --file -
 		echo >&2 "Complete! WordPress has been successfully copied to $PWD"
 
-		echo "Downloading BaltimoreCyberTrustroot.crt.pem"
-    	curl -o /var/www/html/BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
 
-        apt-get update
-        apt-get install unzip
+		# Install BaltimoreCyberTrustRoot.crt.pem
+		if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
+			echo "Downloading BaltimoreCyberTrustroot.crt.pem"
+		    curl -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
+        fi
 
-		echo "Downloading https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
-        curl -o /var/www/html/wp-content/plugins/redis-cache.zip -fSL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+		# Install Redis Cache WordPress Plugin
+	    if [ ! -e wp-content/plugins/redis-cache ]; then
 
-		echo "Unzipping redis-cache.zip"
-        unzip /var/www/html/wp-content/plugins/redis-cache.zip
+			# Update package repos
+			apt-get update
 
-		echo "Removing redis-cache.zip"
-        rm /var/www/html/wp-content/plugins/redis-cache.zip
-        
+			# Install unzip
+			apt-get install unzip
+
+			echo "Downloading https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+			curl -fsL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+
+			echo "Unzipping redis-cache.1.3.8.zip to /var/www/html/wp-content/plugins/"
+			unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
+
+			echo "Removing redis-cache.1.3.8.zip"
+			rm redis-cache.1.3.8.zip
+        fi
+   
         chown -R "$user:$group" /var/www/html
 
 		if [ ! -e .htaccess ]; then
