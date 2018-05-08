@@ -58,7 +58,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		# Install BaltimoreCyberTrustRoot.crt.pem
 		if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
 			echo "Downloading BaltimoreCyberTrustroot.crt.pem"
-		    curl -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
+		    curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
         fi
 
 		# Install Redis Cache WordPress Plugin
@@ -71,7 +71,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			apt-get install unzip
 
 			echo "Downloading https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
-			curl -fsL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
+			curl -o redis-cache.1.3.8.zip -fsL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
 
 			echo "Unzipping redis-cache.1.3.8.zip to /var/www/html/wp-content/plugins/"
 			unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
