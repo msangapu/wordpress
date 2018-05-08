@@ -74,7 +74,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			curl -o redis-cache.1.3.8.zip -fsL "https://downloads.wordpress.org/plugin/redis-cache.1.3.8.zip"
 
 			echo "Unzipping redis-cache.1.3.8.zip to /var/www/html/wp-content/plugins/"
-			unzip redis-cache.1.3.8.zip -q -d /var/www/html/wp-content/plugins/
+			unzip -q redis-cache.1.3.8.zip -d /var/www/html/wp-content/plugins/
 
 			echo "Removing redis-cache.1.3.8.zip"
 			rm redis-cache.1.3.8.zip
