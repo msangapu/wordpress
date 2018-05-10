@@ -1,4 +1,4 @@
-# Docker Compose Multi-container for Web App for Containers
+# Multi-container Docker Compose in Web App for Containers
 A simple WordPress + MySQL app running in Docker containers.
 
 ## Setting up multi-container configuration for Web App for Containers
