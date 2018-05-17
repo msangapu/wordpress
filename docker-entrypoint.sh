@@ -58,8 +58,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		# Install BaltimoreCyberTrustRoot.crt.pem
 		if [ ! -e BaltimoreCyberTrustRoot.crt.pem ]; then
 			echo "Downloading BaltimoreCyberTrustroot.crt.pem"
-		    curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
-        fi
+			curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"
+		fi
 
 		# Install Redis Cache WordPress Plugin
 	    if [ ! -e wp-content/plugins/redis-cache ]; then
