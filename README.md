@@ -1,4 +1,4 @@
-# Multi-container using Docker Compose and Kubernetes in Web App for Containers
+# Multi-container using Docker Compose and Kubernetes in Azure Web App for Containers
 This custom image is based on the 'official image' of [WordPress from Docker Hub](https://hub.docker.com/_/wordpress/).
 
 The following changes have been made in this custom image:
